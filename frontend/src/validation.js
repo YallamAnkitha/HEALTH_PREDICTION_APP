@@ -1,36 +1,33 @@
 function validatePatientData(patientData) {
     const errors = {};
 
-    // Validate name
-    if (!patientData.name || patientData.name.trim() === '') {
-        errors.name = 'Name is required';
+    if (!patientData.full_name || patientData.full_name.trim() === '') {
+        errors.full_name = 'Full name is required.';
     }
 
-    // Validate age
-    if (!patientData.age || isNaN(patientData.age) || patientData.age <= 0) {
-        errors.age = 'Age must be a positive number';
+    if (!patientData.dob || isNaN(Date.parse(patientData.dob))) {
+        errors.dob = 'Date of birth must be a valid date.';
+    } else if (new Date(patientData.dob) > new Date()) {
+        errors.dob = 'Date of birth cannot be in the future.';
     }
 
-    // Validate gender
-    const validGenders = ['male', 'female', 'other'];
-    if (!patientData.gender || !validGenders.includes(patientData.gender.toLowerCase())) {
-        errors.gender = 'Gender must be male, female, or other';
+    if (!patientData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(patientData.email)) {
+        errors.email = 'A valid email address is required.';
     }
 
-    // Validate symptoms
-    if (!patientData.symptoms || patientData.symptoms.length === 0) {
-        errors.symptoms = 'At least one symptom is required';
+    if (patientData.glucose === undefined || patientData.glucose === '' || isNaN(patientData.glucose)) {
+        errors.glucose = 'Glucose must be a number.';
     }
 
-    // Validate contact information
-    if (!patientData.contact || !/^\d{10}$/.test(patientData.contact)) {
-        errors.contact = 'Contact number must be a 10-digit number';
+    if (patientData.haemoglobin === undefined || patientData.haemoglobin === '' || isNaN(patientData.haemoglobin)) {
+        errors.haemoglobin = 'Haemoglobin must be a number.';
     }
 
-    return {
-        isValid: Object.keys(errors).length === 0,
-        errors
-    };
+    if (patientData.cholesterol === undefined || patientData.cholesterol === '' || isNaN(patientData.cholesterol)) {
+        errors.cholesterol = 'Cholesterol must be a number.';
+    }
+
+    return errors;
 }
 
 export default validatePatientData;
